@@ -1,16 +1,12 @@
-provider "azurerm" {
-    features {}
-}
-
 # Create a resource group 
 resource "azurerm_resource_group" "resource_group" {
-  name = "rg-terraform-demo"
-  location = "southcentralus"
+  name = var.resource_group_name
+  location = var.location
 }
 
 # Create a storage account 
 resource "azurerm_storage_account" "storage_account" {
-  name = "terraformazurehouston6"
+  name = var.storage_account_name
   resource_group_name = azurerm_resource_group.resource_group.name
   location = azurerm_resource_group.resource_group.location
   account_tier = "Standard"
@@ -24,10 +20,10 @@ resource "azurerm_storage_account" "storage_account" {
 
 # Add a index.html file 
 resource "azurerm_storage_blob" "blob" {
-  name = "index.html"
+  name = var.index_document
   storage_account_name = azurerm_storage_account.storage_account.name
   storage_container_name = "$web"
   type = "Block"
   content_type = "text/html"
-  source_content = "<h1> Ahoy, this is a website deployed using Terraform <h1>"
+  source_content = var.source_content
 }
